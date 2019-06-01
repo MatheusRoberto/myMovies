@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Buscar
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="spinnerCenter" *ngIf="buscando">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  <ion-list *ngIf="busca.length > 0">
+    <ion-item *ngFor="let item of busca">
+      <ion-card (click)="isSelected(item)">
+        <ion-row>
+          <ion-col size="4">
+            <img src="{{ item.poster }}">
+          </ion-col>
+          <ion-col>
+            <ion-card-header>
+              <ion-row>
+                <ion-col size="8">
+                  <ion-badge>
+                    {{ item.titulo }}
+                  </ion-badge>
+                </ion-col>
+                <ion-col>
+                  <ion-icon name="star-outline"></ion-icon>
+                  {{ item.mediaVotos }}/10
+                </ion-col>
+              </ion-row>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                {{ item.titulo_orig }}
+              </ion-item>
+              <ion-item>
+                {{ item.dataLanc }}
+              </ion-item>
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-item>
+      <ion-label position="floating">Digite nome do filme</ion-label>
+      <ion-input type="text" [(ngModel)]="query"></ion-input>
+      <ion-button (click)="getBusca()" slot="end" *ngIf="query.length > 2" >
+        <ion-icon name="search"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

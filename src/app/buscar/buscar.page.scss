@@ -1,0 +1,22 @@
+.spinnerCenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+ion-spinner {
+    transform: scale(6);
+}
+
+ion-card{
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+}
+  
+img {
+    height: 170px;
+}

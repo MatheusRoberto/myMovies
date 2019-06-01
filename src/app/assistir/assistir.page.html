@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Quero Assistir</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item *ngIf="isVazio && assistir.length === 0" color="primary" lines="full" class="ion-text-center">
+    <ion-icon name="sad" size="large"></ion-icon>
+    <ion-label *ngIf="isVazio">
+      Lista vazia, adicione algum filme!
+    </ion-label>
+    <ion-icon name="sad" size="large"></ion-icon>
+  </ion-item>
+  <ion-list class="custom-skeleton" *ngIf="assistir.length == 0 && !isVazio">
+    <ion-card *ngFor="let i of [0, 1, 2, 3, 4]">
+      <ion-grid>
+        <ion-row align-items-center>
+          <ion-col size="1">
+            <div class="spinnerCenter">
+              <ion-spinner name="bubbles"></ion-spinner>
+            </div>
+          </ion-col>
+          <ion-col size="10">
+            <ion-card-header>
+              <ion-row>
+                <ion-col size="10">
+                  <ion-badge>
+                    <ion-skeleton-text style="width: 90px; height: 0px"></ion-skeleton-text>
+                  </ion-badge>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-badge color="warning">
+                    <ion-skeleton-text style="width: 30px; height: 0px"></ion-skeleton-text>
+                  </ion-badge>
+                </ion-col>
+              </ion-row>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-list>
+
+  <ion-list *ngIf="assistir.length > 0">
+    <ion-item *ngFor="let item of assistir">
+      <ion-card (click)="isSelected(item)">
+        <ion-row>
+          <ion-col size="4">
+            <img src="{{ item.filme.poster }}">
+          </ion-col>
+          <ion-col>
+            <ion-card-header>
+              <ion-row>
+                <ion-col size="10">
+                  <ion-badge>
+                    {{ item.filme.titulo }}
+                  </ion-badge>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-badge color="warning">
+                    {{ item.filme.vezes }}
+                  </ion-badge>
+                </ion-col>
+              </ion-row>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-icon name="film"></ion-icon>
+                <ion-label> {{ item.filme.tituloOrig }}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-icon name="calendar"></ion-icon>
+                <ion-label> {{ item.data }}</ion-label>
+              </ion-item>
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+</ion-content>

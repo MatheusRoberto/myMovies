@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ficha do Filme</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list class="custom-skeleton" *ngIf="movie.id == undefined">
+    <ion-card>
+      <ion-card-header>
+        <ion-spinner name="crescent">
+
+        </ion-spinner>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-label>
+          <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <ion-list *ngIf="movie.id != undefined && assistido != undefined && assistir != undefined">
+    <ion-card>
+      <ion-slides pager="true">
+        <ion-slide *ngFor="let img of movie.imagens">
+          <img [src]="img" />
+        </ion-slide>
+      </ion-slides>
+
+      <ion-card-header>
+        <ion-card-title>
+          {{ movie.titulo }}
+        </ion-card-title>
+        <ion-card-subtitle>
+          {{ movie.tituloOrig }}
+        </ion-card-subtitle>
+        <ion-grid>
+          <ion-row align-items-center>
+            <ion-col>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-label>
+                {{ movie.mediaVotos }}/10
+              </ion-label>
+            </ion-col>
+            <ion-list *ngFor="let item of movie.genero">
+              <ion-col>
+                {{ item.name }}
+              </ion-col>
+            </ion-list>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              Duração:
+            </ion-col>
+            <ion-col>
+              Orçamento:
+            </ion-col>
+            <ion-col>
+              Receita:
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-icon name="clock"></ion-icon>
+              <ion-label> {{ movie.tempo}} min.</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-icon name="cash"></ion-icon>
+              <ion-label> {{ movie.orcamento | currency:"BRL":true:"1.2" }}</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-icon name="wallet"></ion-icon>
+              <ion-label> {{ movie.receita | currency:"BRL":true:"1.2" }}</ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row align-items-center>
+            <ion-col>
+              <ion-button fill="clear" size="small" expand="full" (click)="openBrowser(movie.imdb)">Imdb</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button *ngIf="movie.homepage !== undefined" fill="clear" size="small"
+                (click)="openBrowser(movie.homepage)" expand="full">
+                Site</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button fill="clear" size="small" (click)="isSimilar(movie)" expand="full">
+                Similares</ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="movie.videos !== undefined" align-items-center>
+            <ion-col *ngFor="let video of movie.videos">
+              <ion-button fill="clear" size="small" (click)="openBrowser(video.url)" expand="full">
+                {{ video.tipo }}</ion-button>
+
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-label slot="end">
+          <ion-icon name="star-outline"></ion-icon>
+          {{ movie.mediaVotos }}
+        </ion-label>
+
+      </ion-card-header>
+
+      <ion-card-content>
+        {{ movie.sinopse }}
+      </ion-card-content>
+      <ion-button expand="full" color="primary" *ngIf="!assistir" (click)="adicionarAssistir()">
+        <ion-label *ngIf="assistido === false && !assistir">Quero Assistir</ion-label>
+        <ion-label *ngIf="assistido === true && assistir === false">Vale a Pena Ver de Novo</ion-label>
+      </ion-button>
+      <ion-button expand="full" color="tertiary" (disabled)="assistido" (click)="adicionarAssistido()">
+        Já Assisti
+      </ion-button>
+    </ion-card>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,42 @@
+<ion-menu side="start" menuId="menu" contentId="menuContent">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-menu-toggle auto-hide="true">
+        <ion-item routerLink="/menu/home" routerDirection="root" routerLinkActive="active">
+          <ion-icon ios="ios-film" md="md-film" slot="start"></ion-icon>
+          <ion-label>Em Cartaz</ion-label>
+        </ion-item>
+        <ion-item routerLink="/menu/comming" routerDirection="root" routerLinkActive="active">
+          <ion-icon name="time" slot="start"></ion-icon>
+          <ion-label>Próximos Lançamentos</ion-label>
+        </ion-item>
+        <ion-item routerLink="/menu/top-rated" routerDirection="root" routerLinkActive="active">
+          <ion-icon name="star" slot="start"></ion-icon>
+          <ion-label>Top Filmes</ion-label>
+        </ion-item>
+        <ion-item routerLink="/menu/assistir" routerDirection="root" routerLinkActive="active">
+          <ion-icon name="book" slot="start"></ion-icon>
+          <ion-label>Quero Assistir</ion-label>
+        </ion-item>
+        <ion-item routerLink="/menu/assistido" routerDirection="root" routerLinkActive="active">
+          <ion-icon name="bookmarks" slot="start"></ion-icon>
+          <ion-label>Já Assisti</ion-label>
+        </ion-item>
+        <ion-item routerLink="/menu/buscar" routerDirection="root" routerLinkActive="active">
+          <ion-icon name="search" slot="start"></ion-icon>
+          <ion-label>Buscar</ion-label>
+        </ion-item>
+        <ion-item (click)="logout()">
+          <ion-icon name="exit" slot="start"></ion-icon>
+          <ion-label>Sair</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-router-outlet main id="menuContent"></ion-router-outlet>

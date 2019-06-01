@@ -1,0 +1,73 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title *ngIf="inicio === undefined && fim === undefined">
+        Proximos Lançamentos
+      </ion-title>
+      <ion-title *ngIf="inicio !== undefined && fim !== undefined" >
+          Proximos Lançamentos de {{ inicio }} a {{ fim }}
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list class="custom-skeleton" *ngIf="lancamentos.length == 0">
+      <ion-card *ngFor="let i of [0, 1, 2, 3, 4]">
+        <ion-grid>
+          <ion-row align-items-center>
+            <ion-col size="1">
+              <div class="spinnerCenter">
+                <ion-spinner name="bubbles"></ion-spinner>
+              </div>
+            </ion-col>
+            <ion-col size="10">
+              <ion-card-header>
+                <ion-badge>
+                  <ion-skeleton-text style="width: 150px; height: 0px"></ion-skeleton-text>
+                </ion-badge>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-skeleton-text animated style="width: 85%"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+              </ion-card-content>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ion-list>
+  
+    <ion-list *ngIf="lancamentos.length > 0">
+      <ion-item *ngFor="let item of lancamentos">
+        <ion-card (click)="isSelected(item)">
+            <ion-row>
+              <ion-col size="4">
+                <img src="{{ item.poster }}" class="limit-image">
+              </ion-col>
+              <ion-col>
+                <ion-card-header>
+                  <ion-row>
+                    <ion-col>
+                      <ion-badge>
+                        {{ item.titulo }}
+                      </ion-badge>
+                    </ion-col>
+                    <ion-col>
+                      {{ item.dataLanc }}
+                    </ion-col>
+                    <ion-col>
+                      <ion-icon name="star-outline"></ion-icon>
+                      {{ item.mediaVotos }}/10
+                    </ion-col>
+                  </ion-row>
+                </ion-card-header>
+                <ion-card-content>
+                  {{ item.sinopse }}
+                </ion-card-content>
+              </ion-col>
+            </ion-row>
+        </ion-card>
+      </ion-item>
+    </ion-list>
+  </ion-content>

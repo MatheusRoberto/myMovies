@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding" *ngIf="!checkingUser">
+    <ion-item *ngIf="mensagem !== undefined">
+      <ion-icon name="warning"></ion-icon>
+      <ion-label color="warning">{{ mensagem }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Email do usuário</ion-label>
+      <ion-input [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Senha</ion-label>
+      <ion-input [(ngModel)]="senha" type="password" (keyup.enter)="login()"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="login()">
+      <ion-spinner *ngIf="showLoading"></ion-spinner>
+      <ion-label *ngIf="!showLoading">Login</ion-label>
+    </ion-button>
+    <ion-button expand="block" fill="outline" (click)="registrar()">
+        <ion-spinner *ngIf="showLoadingR"></ion-spinner>
+        <ion-label *ngIf="!showLoadingR">Registrar</ion-label>
+    </ion-button>
+  </div>
+  <div class="loading" *ngIf="checkingUser">
+    <ion-spinner></ion-spinner>
+  </div>
