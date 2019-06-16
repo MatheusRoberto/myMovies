@@ -57,7 +57,7 @@ export class AssistidoPage implements OnInit {
         id: movie.filme.id
       }
     };
-    this.router.navigate(['movie-card'], navigation);
+    this.router.navigate(['/menu/movie-card'], navigation);
   }
 
   dateSortAsc = (a, b) => {

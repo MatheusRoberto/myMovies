@@ -6,7 +6,7 @@
     <ion-title *ngIf="inicio === undefined && fim === undefined">
       Em Cartaz
     </ion-title>
-    <ion-title *ngIf="inicio !== undefined && fim !== undefined" >
+    <ion-title *ngIf="inicio !== undefined && fim !== undefined">
       Em Cartaz de {{ inicio }} a {{ fim }}
     </ion-title>
   </ion-toolbar>
@@ -41,32 +41,31 @@
   <ion-list *ngIf="cartaz.length > 0">
     <ion-item *ngFor="let item of cartaz">
       <ion-card (click)="isSelected(item)">
-          <ion-row>
-            <ion-col size="4">
-              <img src="{{ item.poster }}" class="limit-image">
-            </ion-col>
-            <ion-col>
-              <ion-card-header>
-                <ion-row>
-                  <ion-col>
-                    <ion-badge>
-                      {{ item.titulo }}
-                    </ion-badge>
-                  </ion-col>
-                  <ion-col>
-                    {{ item.dataLanc }}
-                  </ion-col>
-                  <ion-col>
-                    <ion-icon name="star-outline"></ion-icon>
-                    {{ item.mediaVotos }}/10
-                  </ion-col>
-                </ion-row>
-              </ion-card-header>
-              <ion-card-content>
-                {{ item.sinopse }}
-              </ion-card-content>
-            </ion-col>
-          </ion-row>
+        <ion-row>
+          <ion-col size="4" class="col-img">
+            <img src="{{ item.poster }}" />
+          </ion-col>
+          <ion-col size="8">
+
+            <ion-row>
+              <ion-badge text-wrap>
+                {{ item.titulo }}
+              </ion-badge>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                {{ item.dataLanc }}
+              </ion-col>
+              <ion-col>
+                <ion-icon name="star-outline"></ion-icon>
+                {{ item.mediaVotos }}/10
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              {{ item.sinopse }}
+            </ion-row>
+          </ion-col>
+        </ion-row>
       </ion-card>
     </ion-item>
   </ion-list>

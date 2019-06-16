@@ -37,60 +37,37 @@
     <ion-item *ngFor="let item of movies">
       <ion-card (click)="isSelected(item)">
         <ion-row>
-          <ion-col size="4">
+          <ion-col size="4" class="col-img">
             <img src="{{ item.poster }}" />
           </ion-col>
-          <ion-col>
-            <ion-card-header>
-              <ion-row>
-                <ion-col>
-                  <ion-badge>
-                    {{ item.titulo }}
-                  </ion-badge>
-                </ion-col>
-                <ion-col>
-                  {{ item.dataLanc }}
-                </ion-col>
-                <ion-col>
-                  <ion-icon name="star-outline"></ion-icon>
-                  {{ item.mediaVotos }}/10
-                </ion-col>
-              </ion-row>
-            </ion-card-header>
-            <ion-card-content>
+          <ion-col size="8">
+
+            <ion-row>
+              <ion-badge text-wrap>
+                {{ item.titulo }}
+              </ion-badge>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                {{ item.dataLanc }}
+              </ion-col>
+              <ion-col>
+                <ion-icon name="star-outline"></ion-icon>
+                {{ item.mediaVotos }}/10
+              </ion-col>
+            </ion-row>
+            <ion-row>
               {{ item.sinopse }}
-            </ion-card-content>
+            </ion-row>
           </ion-col>
         </ion-row>
       </ion-card>
     </ion-item>
   </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadData($event)" threshold="10px">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Buscando os filmes TOP...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
 </ion-content>
-<ion-footer>
-  <ion-toolbar>
-    <ion-grid class="button-group">
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" (click)="first()" *ngIf="pagina != 1" color="primary">
-            Primeira
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" (click)="previous()" *ngIf="pagina != 1" color="primary">
-            Anterior
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" (click)="next()" *ngIf="pagina != totalPagina" color="primary">
-            Próxima
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" (click)="last()" *ngIf="pagina != totalPagina" color="primary">
-            Última
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-toolbar>
-</ion-footer>

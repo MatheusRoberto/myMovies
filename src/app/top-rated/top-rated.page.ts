@@ -32,20 +32,24 @@ export class TopRatedPage implements OnInit {
 
     const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=pt-BR&page=${this.pagina}&region=br`;
 
-    this.movies = [];
-
     this.http.get(url, headers).subscribe(
       async sucesso => {
         console.log(sucesso.json());
         const filmes = sucesso.json().results;
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < filmes.length; i++) {
+          let lPoster;
+          if (filmes[i].poster_path === null) {
+            lPoster = 'assets/img/no-image.jpg';
+          } else {
+            lPoster = `https://image.tmdb.org/t/p/w500${filmes[i].poster_path}`;
+          }
           this.movies.push({
             dataLanc: moment(filmes[i].release_date).format('DD/MM/YYYY'),
             id: filmes[i].id,
             mediaVotos: filmes[i].vote_average,
-            sinopse: await this.doTruncarStr(filmes[i].overview, filmes[i].overview.length / 2),
-            poster: `https://image.tmdb.org/t/p/w500${filmes[i].poster_path}`,
+            sinopse: await this.doTruncarStr(filmes[i].overview, filmes[i].overview.length / 4),
+            poster: lPoster,
             titulo: filmes[i].title
           });
           this.totalPagina = sucesso.json().total_pages;
@@ -64,28 +68,14 @@ export class TopRatedPage implements OnInit {
     this.router.navigate(['/menu/movie-card'], navigation);
   }
 
-  first() {
-    this.pagina = 1;
-    this.getTopRated();
-  }
-
-  last() {
-    this.pagina = this.totalPagina;
-    this.getTopRated();
-  }
-
-  previous() {
-    if (this.pagina > 1) {
-      this.pagina--;
-      this.getTopRated();
-    }
-  }
-
-  next() {
-    if (this.pagina < this.totalPagina) {
-      this.pagina++;
-      this.getTopRated();
-    }
+  loadData(event) {
+    setTimeout(() => {
+      if (this.pagina < this.totalPagina) {
+        this.pagina++;
+        this.getTopRated();
+        event.target.complete();
+      }
+    }, 2000);
   }
 
   doTruncarStr(str, size) {

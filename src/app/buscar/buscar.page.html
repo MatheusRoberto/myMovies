@@ -55,7 +55,7 @@
     <ion-item>
       <ion-label position="floating">Digite nome do filme</ion-label>
       <ion-input type="text" [(ngModel)]="query"></ion-input>
-      <ion-button (click)="getBusca()" slot="end" *ngIf="query.length > 2" >
+      <ion-button (click)="getBusca()" slot="end" *ngIf="query !== undefined && query.length > 2" >
         <ion-icon name="search"></ion-icon>
       </ion-button>
     </ion-item>

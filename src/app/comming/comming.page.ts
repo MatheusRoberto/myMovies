@@ -38,11 +38,17 @@ export class CommingPage implements OnInit {
         this.fim = moment(sucesso.json().dates.maximum).format('DD/MM');
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < filmes.length; i++) {
+          let lPoster;
+          if (filmes[i].poster_path === null) {
+            lPoster = 'assets/img/no-image.jpg';
+          } else {
+            lPoster = `https://image.tmdb.org/t/p/w500${filmes[i].poster_path}`;
+          }
           this.lancamentos.push({
             dataLanc: moment(filmes[i].release_date).format('DD/MM/YYYY'),
             id: filmes[i].id,
             mediaVotos: filmes[i].vote_average,
-            poster: `https://image.tmdb.org/t/p/w500${filmes[i].poster_path}`,
+            poster: lPoster,
             sinopse: await this.doTruncarStr(filmes[i].overview, filmes[i].overview.length / 2),
             titulo: filmes[i].title
           });
