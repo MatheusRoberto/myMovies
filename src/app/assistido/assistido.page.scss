@@ -10,24 +10,25 @@ ion-spinner {
     transform: scale(2);
 }
 
+
 ion-card{
     display: flex;
     flex-direction: column;
     width: 100% !important;
     margin: 0 !important;
-}
-
-ion-row {
-    max-height: 300px;
-}
+  }
   
-ion-col {
-    max-height: 300px;
-}
+  ion-row {
+    max-height: 175px;
+  }
   
-img {
-    width: auto;
+  .col-img {
+    max-height: 180px !important;
+  }
+  
+  img {
+    width: 118px;
     height: 100%;
     max-height: 100%;
     max-width: 100%;
-}
+  }

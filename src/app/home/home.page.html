@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-menu-button color="light"></ion-menu-button>
     </ion-buttons>
-    <ion-title *ngIf="inicio === undefined && fim === undefined">
+    <ion-title *ngIf="inicio === undefined && fim === undefined" color="light">
       Em Cartaz
     </ion-title>
-    <ion-title *ngIf="inicio !== undefined && fim !== undefined">
+    <ion-title *ngIf="inicio !== undefined && fim !== undefined" color="light">
       Em Cartaz de {{ inicio }} a {{ fim }}
     </ion-title>
   </ion-toolbar>

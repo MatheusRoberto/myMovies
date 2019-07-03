@@ -1,3 +1,5 @@
+import { TheMovieService } from './../services/the-movie.service';
+import { ModalSimilarPage } from './../modal-similar/modal-similar.page';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FirebaseService } from './../services/firebase.service';
 import { Component, OnInit } from '@angular/core';
@@ -5,7 +7,7 @@ import { Http, Headers } from '@angular/http';
 import * as moment from 'moment';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { UsuarioService } from '../services/usuario.service';
-import {  ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-movie-card',
@@ -28,7 +30,9 @@ export class MovieCardPage implements OnInit {
               private usuario: UsuarioService,
               private toast: ToastController,
               private iab: InAppBrowser,
-              private router: Router) {
+              private router: Router,
+              public modal: ModalController,
+              private theMovieService: TheMovieService) {
     this.carregaUser();
     this.route.queryParams.subscribe(params => {
       if (params && params.id) {
@@ -46,30 +50,28 @@ export class MovieCardPage implements OnInit {
 
     const apiKey = 'f6ab6a4a601bf61874516efcb8a6f282';
 
-    const headers = { headers: new Headers({ 'Cache-Control': 'no-cache' }) };
 
-    // tslint:disable-next-line:max-line-length
-    const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=pt-BR&region=br&append_to_response=videos,images&include_image_language=pt-BR,null`;
 
-    await this.http.get(url, headers).subscribe(
-      async sucesso => {
-        console.log(sucesso.json());
-        this.movie.dataLanc = moment(sucesso.json().release_date).format('DD/MM/YYYY');
-        this.movie.genero = sucesso.json().genres;
-        this.movie.homepage = sucesso.json().homepage;
-        this.movie.id = sucesso.json().id;
-        this.movie.imdb = `https://www.imdb.com/title/${sucesso.json().imdb_id}`;
-        this.movie.imagens = await this.imagens(sucesso.json().images);
-        this.movie.mediaVotos = sucesso.json().vote_average;
-        this.movie.orcamento = sucesso.json().budget;
-        this.movie.planoFundo = `https://image.tmdb.org/t/p/original${sucesso.json().backdrop_path}`;
-        this.movie.poster = `https://image.tmdb.org/t/p/w300${sucesso.json().poster_path}`;
-        this.movie.receita = sucesso.json().revenue;
-        this.movie.sinopse = sucesso.json().overview;
-        this.movie.tempo = sucesso.json().runtime;
-        this.movie.titulo = sucesso.json().title;
-        this.movie.tituloOrig = sucesso.json().original_title;
-        this.movie.videos = await this.videos(sucesso.json().videos);
+    const url = `movie/${id}?api_key=${apiKey}&language=pt-BR&region=br&append_to_response=videos,images&include_image_language=pt-BR,null`;
+
+    await this.theMovieService.getData(url).subscribe(
+      async (sucesso: any) => {
+        this.movie.dataLanc = moment(sucesso.release_date).format('DD/MM/YYYY');
+        this.movie.genero = sucesso.genres;
+        this.movie.homepage = sucesso.homepage;
+        this.movie.id = sucesso.id;
+        this.movie.imdb = `https://www.imdb.com/title/${sucesso.imdb_id}`;
+        this.movie.imagens = await this.imagens(sucesso.images);
+        this.movie.mediaVotos = sucesso.vote_average;
+        this.movie.orcamento = sucesso.budget;
+        this.movie.planoFundo = `https://image.tmdb.org/t/p/original${sucesso.backdrop_path}`;
+        this.movie.poster = `https://image.tmdb.org/t/p/w300${sucesso.poster_path}`;
+        this.movie.receita = sucesso.revenue;
+        this.movie.sinopse = sucesso.overview;
+        this.movie.tempo = sucesso.runtime;
+        this.movie.titulo = sucesso.title;
+        this.movie.tituloOrig = sucesso.original_title;
+        this.movie.videos = await this.videos(sucesso.videos);
       },
       erro => { console.error(erro); }
     );
@@ -220,13 +222,15 @@ export class MovieCardPage implements OnInit {
     browser.create(link, '_blank');
   }
 
-  isSimilar(movie) {
-    const navigation: NavigationExtras = {
-      queryParams: {
-        id: movie.id,
-        movie: movie.titulo
-      }
-    };
-    this.router.navigate(['/menu/similar'], navigation);
+  async isSimilar(movie) {
+    const pagina = await this.modal.create({
+      component: ModalSimilarPage,
+      componentProps: { id: movie.id, filme: movie.titulo },
+    });
+
+    await pagina.present();
+
+    await pagina.onDidDismiss();
+
   }
 }

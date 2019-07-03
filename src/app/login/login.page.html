@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Login</ion-title>
+    <ion-title color="light">Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -25,8 +25,12 @@
       <ion-label *ngIf="!showLoading">Login</ion-label>
     </ion-button>
     <ion-button expand="block" fill="outline" (click)="registrar()">
-        <ion-spinner *ngIf="showLoadingR"></ion-spinner>
-        <ion-label *ngIf="!showLoadingR">Registrar</ion-label>
+      <ion-spinner *ngIf="showLoadingR"></ion-spinner>
+      <ion-label *ngIf="!showLoadingR">Registrar</ion-label>
+    </ion-button>
+    <ion-button expand="block" size="large" color="primary" (click)="loginFacebook()">
+      <ion-icon slot="start" name="logo-facebook"></ion-icon>
+      Entrar com o Facebook
     </ion-button>
   </div>
   <div class="loading" *ngIf="checkingUser">

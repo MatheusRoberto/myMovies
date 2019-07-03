@@ -1,15 +1,22 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-menu-button color="light"></ion-menu-button>
+    <ion-title *ngIf="filme === undefined" color="light">
+      Similar
+    </ion-title>
+    <ion-title *ngIf="filme !== undefined" color="light">
+      Similar á {{ filme }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-title color="light">Top Filmes</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list class="custom-skeleton" *ngIf="movies.length == 0">
-    <ion-card *ngFor="let i of [0, 1, 2, 3]">
+  <ion-list class="custom-skeleton" *ngIf="similares.length == 0">
+    <ion-card *ngFor="let i of [0, 1, 2, 3, 4]">
       <ion-grid>
         <ion-row align-items-center>
           <ion-col size="1">
@@ -33,9 +40,9 @@
     </ion-card>
   </ion-list>
 
-  <ion-list *ngIf="movies.length > 0">
-    <ion-item *ngFor="let item of movies">
-      <ion-card (click)="isSelected(item)">
+  <ion-list *ngIf="similares.length > 0">
+    <ion-item *ngFor="let item of similares">
+      <ion-card>
         <ion-row>
           <ion-col size="4" class="col-img">
             <img src="{{ item.poster }}" />
@@ -64,10 +71,4 @@
       </ion-card>
     </ion-item>
   </ion-list>
-
-  <ion-infinite-scroll (ionInfinite)="loadData($event)" threshold="10px">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Buscando os filmes TOP...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-
 </ion-content>

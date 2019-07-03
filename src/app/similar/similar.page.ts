@@ -1,3 +1,4 @@
+import { TheMovieService } from './../services/the-movie.service';
 import { Http, Headers } from '@angular/http';
 import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -13,7 +14,7 @@ export class SimilarPage implements OnInit {
   public similares = [];
   public filme = '';
 
-  constructor(private http: Http, private router: Router, private route: ActivatedRoute) {
+  constructor(private http: Http, private router: Router, private route: ActivatedRoute, private theMovieService: TheMovieService) {
     this.route.queryParams.subscribe(params => {
       if (params && params.id && params.movie) {
         this.filme = params.movie;
@@ -25,18 +26,17 @@ export class SimilarPage implements OnInit {
   ngOnInit() {
   }
 
-  getSimilares(id) {
+  async getSimilares(id) {
     const apiKey = 'f6ab6a4a601bf61874516efcb8a6f282';
 
-    const headers = { headers: new Headers({ 'Cache-Control': 'no-cache' }) };
 
-    const url = `https://api.themoviedb.org/3/movie/${id}/similar?api_key=${apiKey}&language=pt-BR&page=1&region=br`;
+    const url = `movie/${id}/similar?api_key=${apiKey}&language=pt-BR&page=1&region=br`;
 
     this.similares = [];
 
-    this.http.get(url, headers).subscribe(
-      async sucesso => {
-        const filmes = sucesso.json().results;
+    await this.theMovieService.getData(url).subscribe(
+      async (sucesso: any) => {
+        const filmes = sucesso.results;
 
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < filmes.length; i++) {

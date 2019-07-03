@@ -11,17 +11,23 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpModule } from '@angular/http';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
+
+import { Facebook } from '@ionic-native/facebook/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     HttpModule,
+    HttpClientModule,
+    HttpClientJsonpModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule
   ],
   providers: [
+    Facebook,
     StatusBar,
     SplashScreen,
     InAppBrowser,

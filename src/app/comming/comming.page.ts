@@ -1,3 +1,4 @@
+import { TheMovieService } from './../services/the-movie.service';
 import { Router, NavigationExtras } from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import { Component, OnInit } from '@angular/core';
@@ -15,27 +16,25 @@ export class CommingPage implements OnInit {
   public inicio;
   public fim;
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private http: Http, private router: Router, private theMovieService: TheMovieService) {
     this.getLancamentos();
   }
 
   ngOnInit() { }
 
-  getLancamentos() {
+  async getLancamentos() {
     const apiKey = 'f6ab6a4a601bf61874516efcb8a6f282';
 
-    const headers = { headers: new Headers({ 'Cache-Control': 'no-cache' }) };
-
-    const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}&language=pt-BR&page=1&region=br`;
+    const url = `movie/upcoming?api_key=${apiKey}&language=pt-BR&page=1&region=br`;
 
     this.lancamentos = [];
 
-    this.http.get(url, headers).subscribe(
-      async sucesso => {
-        const filmes = sucesso.json().results;
+    await this.theMovieService.getData(url).subscribe(
+      async (sucesso: any) => {
+        const filmes = sucesso.results;
 
-        this.inicio = moment(sucesso.json().dates.minimum).format('DD/MM');
-        this.fim = moment(sucesso.json().dates.maximum).format('DD/MM');
+        this.inicio = moment(sucesso.dates.minimum).format('DD/MM');
+        this.fim = moment(sucesso.dates.maximum).format('DD/MM');
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < filmes.length; i++) {
           let lPoster;

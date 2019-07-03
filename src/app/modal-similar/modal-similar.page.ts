@@ -1,79 +1,59 @@
 import { TheMovieService } from './../services/the-movie.service';
-import { MovieCardPage } from './../movie-card/movie-card.page';
-import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Http, Headers } from '@angular/http';
+import { ModalController } from '@ionic/angular';
+import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
-import { Router, NavigationExtras } from '@angular/router';
 
 @Component({
-  selector: 'app-top-rated',
-  templateUrl: './top-rated.page.html',
-  styleUrls: ['./top-rated.page.scss'],
+  selector: 'app-modal-similar',
+  templateUrl: './modal-similar.page.html',
+  styleUrls: ['./modal-similar.page.scss'],
 })
-export class TopRatedPage implements OnInit {
+export class ModalSimilarPage implements OnInit {
 
-  public movies = [];
-  public pagina = 1;
-  public totalPagina = 1;
+  @Input() filme: string;
+  @Input() id: number;
 
-  movieCard = MovieCardPage;
+  public similares = [];
 
-  constructor(private http: Http, private router: Router, private theMovieService: TheMovieService) {
-    this.getTopRated();
-  }
+  constructor(public modal: ModalController, private http: Http, private theMovieService: TheMovieService) { }
 
   ngOnInit() {
+    this.getSimilares();
   }
 
-  async getTopRated() {
+  close() {
+    this.modal.dismiss({
+      retorno: 'Fechou'
+    });
+  }
 
+  async getSimilares() {
     const apiKey = 'f6ab6a4a601bf61874516efcb8a6f282';
 
-    const url = `movie/top_rated?api_key=${apiKey}&language=pt-BR&page=${this.pagina}&region=br`;
+    const url = `movie/${this.id}/similar?api_key=${apiKey}&language=pt-BR&page=1&region=br`;
+
+    this.similares = [];
 
     await this.theMovieService.getData(url).subscribe(
       async (sucesso: any) => {
         const filmes = sucesso.results;
+
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < filmes.length; i++) {
-          let lPoster;
-          if (filmes[i].poster_path === null) {
-            lPoster = 'assets/img/no-image.jpg';
-          } else {
-            lPoster = `https://image.tmdb.org/t/p/w500${filmes[i].poster_path}`;
-          }
-          this.movies.push({
+          this.similares.push({
             dataLanc: moment(filmes[i].release_date).format('DD/MM/YYYY'),
             id: filmes[i].id,
             mediaVotos: filmes[i].vote_average,
+            poster: `https://image.tmdb.org/t/p/w500${filmes[i].poster_path}`,
             sinopse: await this.doTruncarStr(filmes[i].overview, filmes[i].overview.length / 4),
-            poster: lPoster,
             titulo: filmes[i].title
           });
-          this.totalPagina = sucesso.total_pages;
         }
       },
       erro => { console.error(erro); }
     );
-  }
-
-  isSelected(movie) {
-    const navigation: NavigationExtras = {
-      queryParams: {
-        id: movie.id
-      }
-    };
-    this.router.navigate(['/menu/movie-card'], navigation);
-  }
-
-  loadData(event) {
-    setTimeout(() => {
-      if (this.pagina < this.totalPagina) {
-        this.pagina++;
-        this.getTopRated();
-        event.target.complete();
-      }
-    }, 2000);
   }
 
   doTruncarStr(str, size) {

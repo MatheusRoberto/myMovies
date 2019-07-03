@@ -62,6 +62,10 @@ export class LoginPage implements OnInit {
     }
   }
 
+  async loginFacebook() {
+    this.usuario.facebookLogin();
+  }
+
   ngOnInit() {
   }
 
