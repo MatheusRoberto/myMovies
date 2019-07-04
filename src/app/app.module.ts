@@ -14,6 +14,8 @@ import { HttpModule } from '@angular/http';
 import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { GoogleMaps } from '@ionic-native/google-maps/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +30,8 @@ import { Facebook } from '@ionic-native/facebook/ngx';
   ],
   providers: [
     Facebook,
+    Geolocation,
+    GoogleMaps,
     StatusBar,
     SplashScreen,
     InAppBrowser,
