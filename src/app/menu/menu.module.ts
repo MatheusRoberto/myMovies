@@ -58,7 +58,10 @@ const routes: Routes = [
         path: 'similar',
         loadChildren: '../similar/similar.module#SimilarPageModule',
         canActivate: [AutenticacaoGuard]
-      }
+      },
+      { path: 'mapa',
+       loadChildren: '../mapa/mapa.module#MapaPageModule',
+       canActivate: [AutenticacaoGuard] }
     ]
   }
 ];

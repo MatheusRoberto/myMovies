@@ -1,4 +1,3 @@
-import { ModalSimilarPage } from './../modal-similar/modal-similar.page';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +21,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MovieCardPage, ModalSimilarPage],
-  entryComponents: [ModalSimilarPage]
+  declarations: [MovieCardPage],
+  entryComponents: []
 })
 export class MovieCardPageModule {}

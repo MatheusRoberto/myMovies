@@ -1,3 +1,4 @@
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { TheMovieService } from './../services/the-movie.service';
 import { ModalSimilarPage } from './../modal-similar/modal-similar.page';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -32,7 +33,8 @@ export class MovieCardPage implements OnInit {
               private iab: InAppBrowser,
               private router: Router,
               public modal: ModalController,
-              private theMovieService: TheMovieService) {
+              private theMovieService: TheMovieService,
+              public social: SocialSharing) {
     this.carregaUser();
     this.route.queryParams.subscribe(params => {
       if (params && params.id) {
@@ -63,10 +65,10 @@ export class MovieCardPage implements OnInit {
         this.movie.imdb = `https://www.imdb.com/title/${sucesso.imdb_id}`;
         this.movie.imagens = await this.imagens(sucesso.images);
         this.movie.mediaVotos = sucesso.vote_average;
-        this.movie.orcamento = sucesso.budget;
+        this.movie.orcamento = this.formatValor(sucesso.budget);
         this.movie.planoFundo = `https://image.tmdb.org/t/p/original${sucesso.backdrop_path}`;
         this.movie.poster = `https://image.tmdb.org/t/p/w300${sucesso.poster_path}`;
-        this.movie.receita = sucesso.revenue;
+        this.movie.receita = this.formatValor(sucesso.revenue);
         this.movie.sinopse = sucesso.overview;
         this.movie.tempo = sucesso.runtime;
         this.movie.titulo = sucesso.title;
@@ -233,4 +235,41 @@ export class MovieCardPage implements OnInit {
     await pagina.onDidDismiss();
 
   }
+
+  async compartilhar(mensagem, assunto = null, file = null, url = null) {
+    await this.social.share(mensagem, assunto, file, url);
+  }
+
+  async criaMensagem() {
+    const msg = `Conheça este filme ${this.movie.titulo}. Utilize o MyMovies para criar sua lista de filmes!`;
+    const img = this.movie.poster;
+    let url;
+    await this.movie.videos.forEach(element => {
+      if (element.tipo === 'Trailer') {
+        url = element.url;
+      }
+    });
+    this.compartilhar(msg, 'Conheça este filme', img, url);
+  }
+
+  formatValor(num) {
+    const si = [
+      { value: 1, symbol: '' },
+      { value: 1E3, symbol: 'k' },
+      { value: 1E6, symbol: 'M' },
+      { value: 1E9, symbol: 'B' },
+      { value: 1E12, symbol: 'T' },
+      { value: 1E15, symbol: 'P' },
+      { value: 1E18, symbol: 'E' }
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    let i;
+    for (i = si.length - 1; i > 0; i--) {
+      if (num >= si[i].value) {
+        break;
+      }
+    }
+    return (num / si[i].value).toFixed(1).replace(rx, '$1') + si[i].symbol;
+  }
+
 }
