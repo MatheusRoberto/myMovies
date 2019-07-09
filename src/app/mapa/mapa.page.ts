@@ -1,4 +1,5 @@
-import { Platform } from '@ionic/angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Platform, AlertController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Component, OnInit } from '@angular/core';
 import { GoogleMap, GoogleMaps, MarkerOptions, GoogleMapsEvent, Marker, LatLng, MyLocation } from '@ionic-native/google-maps/ngx';
@@ -14,7 +15,7 @@ export class MapaPage implements OnInit {
   map: GoogleMap;
   marker: Marker;
 
-  constructor(public geolocation: Geolocation, private platform: Platform) {
+  constructor(public geolocation: Geolocation, private platform: Platform, private alert: AlertController, private iab: InAppBrowser) {
 
   }
 
@@ -27,7 +28,7 @@ export class MapaPage implements OnInit {
       // Move the map camera to the location with animation
       this.map.animateCamera({
         target: location.latLng,
-        zoom: 17,
+        zoom: 15,
         duration: 5000
       });
     });
@@ -46,7 +47,16 @@ export class MapaPage implements OnInit {
   }
 
   async loadMap() {
-    this.map = GoogleMaps.create('map_canvas', {});
+    const options = {
+      controls: {
+        zoom: true,
+      },
+      gestures: {
+        scroll: true,
+        zoom: true,
+      }
+    };
+    this.map = GoogleMaps.create('map_canvas', options);
     await this.getCoordenadas();
     await this.addCinemas();
   }
@@ -67,6 +77,7 @@ export class MapaPage implements OnInit {
     this.marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(_ => {
       this.marker.setAnimation('BOUNCE');
     });
+    await this.addCinemas();
   }
 
   async addCinemas() {
@@ -89,8 +100,23 @@ export class MapaPage implements OnInit {
 
     this.marker = await this.map.addMarker(options);
 
-    this.marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(_ => {
+    this.marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(async () => {
       this.marker.setAnimation('BOUNCE');
+
+      const alerta = await this.alert.create({
+        header: 'Cinema Araújo Ponta Grossa',
+        subHeader: 'Visite o site deste cinema',
+        message: 'http://www.cinearaujo.com.br/cidade.asp?cid_id=20',
+        buttons: ['ok', {
+          text: 'Visitar',
+          handler: () => {
+            const browser = this.iab;
+            browser.create('http://www.cinearaujo.com.br/cidade.asp?cid_id=20', '_blank');
+          }
+        }]
+      });
+
+      await alerta.present();
     });
 
     // Total
@@ -110,8 +136,23 @@ export class MapaPage implements OnInit {
     };
     this.marker = await this.map.addMarker(options);
 
-    this.marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(_ => {
+    this.marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(async () => {
       this.marker.setAnimation('BOUNCE');
+
+      const alerta = await this.alert.create({
+        header: 'Cinema Lumière Ponta Grossa',
+        subHeader: 'Visite o site deste cinema',
+        message: 'https://www.cinemaslumiere.com.br/programacao/ponta-grossa/PGR/',
+        buttons: ['ok', {
+          text: 'Visitar',
+          handler: () => {
+            const browser = this.iab;
+            browser.create('https://www.cinemaslumiere.com.br/programacao/ponta-grossa/PGR/', '_blank');
+          }
+        }]
+      });
+
+      await alerta.present();
     });
   }
 }
