@@ -1,7 +1,7 @@
 import { Platform } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Component, OnInit } from '@angular/core';
-import { GoogleMap, GoogleMaps, MarkerOptions, GoogleMapsEvent, Marker, LatLng } from '@ionic-native/google-maps/ngx';
+import { GoogleMap, GoogleMaps, MarkerOptions, GoogleMapsEvent, Marker, LatLng, MyLocation } from '@ionic-native/google-maps/ngx';
 
 @Component({
   selector: 'app-mapa',
@@ -19,6 +19,19 @@ export class MapaPage implements OnInit {
   }
 
   async getCoordenadas() {
+    this.map.clear();
+
+    this.map.getMyLocation().then((location: MyLocation) => {
+      console.log(JSON.stringify(location, null, 2));
+
+      // Move the map camera to the location with animation
+      this.map.animateCamera({
+        target: location.latLng,
+        zoom: 17,
+        duration: 5000
+      });
+    });
+
     const stream = await this.geolocation.watchPosition();
     await stream.subscribe(data => {
       this.coordenadas.latitude = data.coords.latitude;
@@ -28,30 +41,13 @@ export class MapaPage implements OnInit {
   }
 
   async ngOnInit() {
-    await this.getCoordenadas();
     await this.platform.ready();
     await this.loadMap();
   }
 
   async loadMap() {
-    await this.geolocation.getCurrentPosition().then(async (position) => {
-      this.coordenadas.latitude = position.coords.latitude;
-      this.coordenadas.longitude = position.coords.longitude;
-      console.log(this.coordenadas);
-      const latlng = new LatLng(position.coords.latitude, position.coords.longitude);
-      const mapOptions = await {
-        mapType: 'MAP_TYPE_NORMAL',
-        center: latlng,
-        camera: {
-          target: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
-        },
-        zoom: 18
-      };
-      this.map = GoogleMaps.create('map_canvas', mapOptions);
-    });
+    this.map = GoogleMaps.create('map_canvas', {});
+    await this.getCoordenadas();
     await this.addCinemas();
   }
 

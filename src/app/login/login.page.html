@@ -28,10 +28,6 @@
       <ion-spinner *ngIf="showLoadingR"></ion-spinner>
       <ion-label *ngIf="!showLoadingR">Registrar</ion-label>
     </ion-button>
-    <ion-button expand="block" size="large" color="primary" (click)="loginFacebook()">
-      <ion-icon slot="start" name="logo-facebook"></ion-icon>
-      Entrar com o Facebook
-    </ion-button>
   </div>
   <div class="loading" *ngIf="checkingUser">
     <ion-spinner></ion-spinner>
