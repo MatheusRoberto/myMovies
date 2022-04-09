@@ -43,7 +43,7 @@
     "es6-promise-plugin": "^4.2.2",
     "firebase": "^6.1.0",
     "ionic-angular": "^3.9.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "rxjs": "~6.5.1",
     "rxjs-compat": "^6.5.2",
     "tslib": "^1.9.0",
